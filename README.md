@@ -12,4 +12,5 @@ Forward, backward, left turn, right turn, stand-still rotate
 3. L298 H-Bridge heavy duty w/breakout
 ### Implement
 1. Nucleo control H-bridge logic input (direction of spin)
-2. Nucleo control motor speed through PWM via H-bridge Vs (spinning speed)
+2. Nucleo control motor speed through PWM (tim1 channel 1 PE9 for left motor, tim2 channel 2 PE11 for right motor) via H-bridge enable pin (turning on and off to control spinning speed)
+3. Connect Vs on H-bridge

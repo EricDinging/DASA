@@ -102,6 +102,69 @@ static void MX_USB_OTG_FS_USB_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+uint16_t lmotor_pwm_val = 20; // 0 - 99 throttle control
+uint16_t rmotor_pwm_val = 20;
+uint16_t lmotor_h_bridge_in1 = 1;
+uint16_t lmotor_h_bridge_in2 = 0;
+uint16_t rmotor_h_bridge_in3 = 1;
+uint16_t rmotor_h_bridge_in4 = 0;
+
+
+void motor_control (uint16_t mode) {
+	// mode 0 straight, 1 left turn, 2 right turn, 3 still-rotation, 4 reverse
+	switch(mode) {
+		case 0 :
+			lmotor_pwm_val = 50;
+			rmotor_pwm_val = 50;
+			lmotor_h_bridge_in1 = 1;
+			lmotor_h_bridge_in2 = 0;
+			rmotor_h_bridge_in3 = 1;
+			rmotor_h_bridge_in4 = 0;
+			break;
+		case 1:
+			lmotor_pwm_val = 0;
+			rmotor_pwm_val = 30;
+			lmotor_h_bridge_in1 = 1;
+			lmotor_h_bridge_in2 = 0;
+			rmotor_h_bridge_in3 = 1;
+			rmotor_h_bridge_in4 = 0;
+		case 2:
+			lmotor_pwm_val = 30;
+			rmotor_pwm_val = 0;
+			lmotor_h_bridge_in1 = 1;
+			lmotor_h_bridge_in2 = 0;
+			rmotor_h_bridge_in3 = 1;
+			rmotor_h_bridge_in4 = 0;
+		case 3:
+			lmotor_pwm_val = 15;
+			rmotor_pwm_val = 15;
+			lmotor_h_bridge_in1 = 1;
+			lmotor_h_bridge_in2 = 0;
+			rmotor_h_bridge_in3 = 0;
+			rmotor_h_bridge_in4 = 1;
+		case 4:
+			lmotor_pwm_val = 30;
+			rmotor_pwm_val = 30;
+			lmotor_h_bridge_in1 = 0;
+			lmotor_h_bridge_in2 = 1;
+			rmotor_h_bridge_in3 = 0;
+			rmotor_h_bridge_in4 = 1;
+		default:
+			lmotor_pwm_val = 25;
+			rmotor_pwm_val = 25;
+			lmotor_h_bridge_in1 = 1;
+			lmotor_h_bridge_in2 = 0;
+			rmotor_h_bridge_in3 = 1;
+			rmotor_h_bridge_in4 = 0;
+	}
+
+	htim1.Instance->CCR1 = lmotor_pwm_val; // PE9 to EnA
+	htim1.Instance->CCR2 = rmotor_pwm_val; // PE11 to EnB
+	HAL_GPIO_WritePin(GPIOG, GPIO_PIN_6,  lmotor_h_bridge_in1);
+	HAL_GPIO_WritePin(GPIOG, GPIO_PIN_5,  lmotor_h_bridge_in2);
+	HAL_GPIO_WritePin(GPIOG, GPIO_PIN_4,  rmotor_h_bridge_in3);
+	HAL_GPIO_WritePin(GPIOG, GPIO_PIN_3,  rmotor_h_bridge_in4);
+}
 
 /* USER CODE END 0 */
 
@@ -157,6 +220,11 @@ int main(void)
   MX_TIM15_Init();
   MX_USB_OTG_FS_USB_Init();
   /* USER CODE BEGIN 2 */
+  HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
+  HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
+
+
+
 
   /* USER CODE END 2 */
 
@@ -164,6 +232,10 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+
+	  motor_control(0);
+
+	  HAL_Delay(500);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -906,9 +978,9 @@ static void MX_TIM1_Init(void)
 
   /* USER CODE END TIM1_Init 1 */
   htim1.Instance = TIM1;
-  htim1.Init.Prescaler = 0;
+  htim1.Init.Prescaler = 6399;
   htim1.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim1.Init.Period = 65535;
+  htim1.Init.Period = 99;
   htim1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim1.Init.RepetitionCounter = 0;
   htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
@@ -1239,6 +1311,16 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOD_CLK_ENABLE();
   __HAL_RCC_GPIOG_CLK_ENABLE();
   HAL_PWREx_EnableVddIO2();
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOG, GPIO_PIN_3|GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_6, GPIO_PIN_RESET);
+
+  /*Configure GPIO pins : PG3 PG4 PG5 PG6 */
+  GPIO_InitStruct.Pin = GPIO_PIN_3|GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_6;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
 
   /*Configure GPIO pins : PA8 PA10 PA11 PA12 */
   GPIO_InitStruct.Pin = GPIO_PIN_8|GPIO_PIN_10|GPIO_PIN_11|GPIO_PIN_12;
