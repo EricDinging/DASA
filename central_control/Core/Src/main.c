@@ -172,6 +172,7 @@ int main(void)
   while (1)
   {
 
+	  // set motor mode
 	  motor_control(0);
 
 	  HAL_Delay(500);
