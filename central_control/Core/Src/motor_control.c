@@ -46,8 +46,8 @@ void motor_control (uint16_t mode) {
 			rmotor_h_bridge_in3 = 0;
 			rmotor_h_bridge_in4 = 1;
 		default:
-			lmotor_pwm_val = 25;
-			rmotor_pwm_val = 25;
+			lmotor_pwm_val = 0;
+			rmotor_pwm_val = 0;
 			lmotor_h_bridge_in1 = 1;
 			lmotor_h_bridge_in2 = 0;
 			rmotor_h_bridge_in3 = 1;
