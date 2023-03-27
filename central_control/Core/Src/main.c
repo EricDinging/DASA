@@ -163,6 +163,16 @@ int main(void)
   HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_4);
   uint32_t count = 0;
   uint16_t mode = 0;
+  enum State {
+	  INIT = 0,
+	  SEARCH = 1,
+	  COLLECT = 2,
+	  RETURN = 3,
+	  ANTI_COLLISION = 4
+  };
+
+  enum State state;
+
   while (1)
   {
 	  motor_control(5);
