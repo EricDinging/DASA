@@ -19,6 +19,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "motor_control.h"
+#include "central_control.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -100,6 +101,9 @@ static void MX_USB_OTG_FS_USB_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+enum State state = INIT;
+// prev_state is useful after an interrupt happens
+enum State prev_state = INIT;
 
 /* USER CODE END 0 */
 
@@ -163,26 +167,22 @@ int main(void)
   HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_4);
   uint32_t count = 0;
   uint16_t mode = 0;
-  enum State {
-	  INIT = 0,
-	  SEARCH = 1,
-	  COLLECT = 2,
-	  RETURN = 3,
-	  ANTI_COLLISION = 4
-  };
 
-  enum State state;
 
   while (1)
   {
-	  motor_control(5);
-	  HAL_Delay(5000);
+	  // reset
+	  // central control
+	  // motor_control
 
-	  motor_control(0);
-	  HAL_Delay(5000);
-
-	  motor_control(2);
-	  HAL_Delay(5000);
+//	  motor_control(5);
+//	  HAL_Delay(5000);
+//
+//	  motor_control(0);
+//	  HAL_Delay(5000);
+//
+//	  motor_control(2);
+//	  HAL_Delay(5000);
 
 
 
