@@ -4,18 +4,16 @@
  *  Created on: Mar 12, 2023
  *      Author: ericding
  */
-#include "main.h"
-#include "central_control.h"
 #include "motor_control.h"
 
-void motor_control (uint16_t mode) {
+void motor_control (uint8_t mode) {
 	// mode 0 straight, 1 left turn, 2 right turn, 3 still-rotation, 4 reverse, 5 nitroboost
-	static uint16_t lmotor_pwm_val = 20; // 0 - 99 throttle control
-	static uint16_t rmotor_pwm_val = 20;
-	static uint16_t lmotor_h_bridge_in1 = 1;
-	static uint16_t lmotor_h_bridge_in2 = 0;
-	static uint16_t rmotor_h_bridge_in3 = 1;
-	static uint16_t rmotor_h_bridge_in4 = 0;
+	static uint8_t lmotor_pwm_val = 20; // 0 - 99 throttle control
+	static uint8_t rmotor_pwm_val = 20;
+	static uint8_t lmotor_h_bridge_in1 = 1;
+	static uint8_t lmotor_h_bridge_in2 = 0;
+	static uint8_t rmotor_h_bridge_in3 = 1;
+	static uint8_t rmotor_h_bridge_in4 = 0;
 	switch(mode) {
 		case 0 :
 			lmotor_pwm_val = 50;

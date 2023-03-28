@@ -18,7 +18,6 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "motor_control.h"
 #include "central_control.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -101,9 +100,6 @@ static void MX_USB_OTG_FS_USB_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-enum State state = INIT;
-// prev_state is useful after an interrupt happens
-enum State prev_state = INIT;
 
 /* USER CODE END 0 */
 
@@ -172,6 +168,7 @@ int main(void)
   while (1)
   {
 	  state_update();
+    execute();
 	  // motor control
 //	  motor_control(5);
 //	  HAL_Delay(5000);
