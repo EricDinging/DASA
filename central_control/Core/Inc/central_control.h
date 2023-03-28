@@ -13,12 +13,13 @@ enum State {
 	  SEARCH = 1,
 	  COLLECT = 2,
 	  RETURN = 3,
-	  ANTI_COLLISION = 4
+	  AVOID_COLLISION = 4
   };
 
 extern enum State state;
 extern enum State prev_state;
+#define MAXLOAD 6
 
-void central_control();
+void state_update();
 
 #endif /* INC_CENTRAL_CONTROL_H_ */

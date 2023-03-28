@@ -171,10 +171,8 @@ int main(void)
 
   while (1)
   {
-	  // reset
-	  // central control
-	  // motor_control
-
+	  state_update();
+	  // motor control
 //	  motor_control(5);
 //	  HAL_Delay(5000);
 //
