@@ -12,7 +12,7 @@
 
 extern TIM_HandleTypeDef htim4;
 
-void motor_control (uint16_t mode);
+void motor_control (uint8_t mode);
 
 
 

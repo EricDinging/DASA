@@ -100,9 +100,6 @@ static void MX_USB_OTG_FS_USB_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-enum State state = INIT;
-// prev_state is useful after an interrupt happens
-enum State prev_state = INIT;
 
 /* USER CODE END 0 */
 

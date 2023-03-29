@@ -12,6 +12,7 @@ void state_update() {
 	// state immediately.
 
 	// All the buttons should be rising-edge triggered
+
 	static uint8_t on_off = 0;
 	static uint8_t ball_locked = 0; // from AI
 	static uint8_t ball_not_found = 0; // from AI
@@ -37,6 +38,11 @@ void state_update() {
 	} else {
 		// reading peripheral input, and clear register immediately
 	}
+
+	// Testing arg begin
+	state = SEARCH;
+
+	// Testing arg end
 
 	// disable interrupt
 
@@ -89,6 +95,12 @@ void state_update() {
 	case AVOID_COLLISION:
 		// only interrupt can cause the robot to enter this state
 		// only after certain conditions are met can the robot leave this state
+    
+    if (on_off) {
+			on_off = 0;
+			prev_state = RETURN;
+		}
+
 		if (avoid_finished) {
 			avoid_finished = 0;
 			next_state = prev_state;
@@ -97,14 +109,6 @@ void state_update() {
 				next_state = RETURN;
 			}
 		}
-
-		if (on_off) {
-			on_off = 0;
-			prev_state = RETURN;
-		}
-
-		break;
-	default:
 		break;
 	}
 
@@ -118,19 +122,21 @@ void state_update() {
 
 void execute() {
 	switch (state) {
+	case INIT:
+		break;
 	case SEARCH:
-		// motor control
+		uint8_t mode = 0;
+
+		// read RPI, change mode, set bits
+		motor_control(mode);
+		ball_locked;
+		ball_not_found;
 		break;
 	case COLLECT:
-		// rotor control
 		break;
 	case RETURN:
-		// motor control
 		break;
 	case AVOID_COLLISION:
-		// start timer
-		// move rotor
 		break;
 	}
 }
-
