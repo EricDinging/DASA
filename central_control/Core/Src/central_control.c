@@ -4,7 +4,6 @@
  *  Created on: Mar 25, 2023
  *      Author: eric
  */
-#include "main.h"
 #include "central_control.h"
 
 void state_update() {
@@ -19,6 +18,7 @@ void state_update() {
 	static uint8_t ball_count = 0; // from IR
 	static uint8_t ball_collected = 0; // from IR
 	static uint8_t station_arrived = 0; // from AI
+	static uint8_t avoid_finished = 0; // from timer
 	static uint8_t reset = 0; // reset button
 
 	// read reset button, and set reset bit to 1 only if reset button is pressed
@@ -29,6 +29,7 @@ void state_update() {
 		ball_count = 0;
 		ball_collected = 0;
 		station_arrived = 0;
+		avoid_finished = 0;
 		reset = 0;
 		state = INIT;
 		prev_state = state;
@@ -88,11 +89,18 @@ void state_update() {
 	case AVOID_COLLISION:
 		// only interrupt can cause the robot to enter this state
 		// only after certain conditions are met can the robot leave this state
-		next_state = prev_state;
+		if (avoid_finished) {
+			avoid_finished = 0;
+			next_state = prev_state;
+			if (on_off) {
+				on_off = 0;
+				next_state = RETURN;
+			}
+		}
 
 		if (on_off) {
 			on_off = 0;
-			next_state = RETURN;
+			prev_state = RETURN;
 		}
 
 		break;
@@ -101,9 +109,28 @@ void state_update() {
 	}
 
 	state = next_state;
-	prev_state = state;
+	if (state != AVOID_COLLISION) {
+		prev_state = state;
+	}
 
 	// enable interrupt
+}
 
+void execute() {
+	switch (state) {
+	case SEARCH:
+		// motor control
+		break;
+	case COLLECT:
+		// rotor control
+		break;
+	case RETURN:
+		// motor control
+		break;
+	case AVOID_COLLISION:
+		// start timer
+		// move rotor
+		break;
+	}
 }
 

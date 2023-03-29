@@ -18,7 +18,6 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "motor_control.h"
 #include "central_control.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -165,13 +164,12 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_3);
   HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_4);
-  uint32_t count = 0;
-  uint16_t mode = 0;
 
 
   while (1)
   {
 	  state_update();
+	  execute();
 	  // motor control
 //	  motor_control(5);
 //	  HAL_Delay(5000);

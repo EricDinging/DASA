@@ -4,8 +4,6 @@
  *  Created on: Mar 12, 2023
  *      Author: ericding
  */
-#include "main.h"
-#include "central_control.h"
 #include "motor_control.h"
 
 void motor_control (uint16_t mode) {

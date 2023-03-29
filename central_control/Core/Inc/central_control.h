@@ -8,6 +8,9 @@
 #ifndef INC_CENTRAL_CONTROL_H_
 #define INC_CENTRAL_CONTROL_H_
 
+#include "main.h"
+#include "motor_control.h"
+
 enum State {
 	  INIT = 0,
 	  SEARCH = 1,
@@ -21,5 +24,7 @@ extern enum State prev_state;
 #define MAXLOAD 6
 
 void state_update();
+
+void execute();
 
 #endif /* INC_CENTRAL_CONTROL_H_ */
