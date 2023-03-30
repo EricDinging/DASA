@@ -8,8 +8,10 @@
 #ifndef INC_CENTRAL_CONTROL_H_
 #define INC_CENTRAL_CONTROL_H_
 
-#include "motor_control.h"
+
 #include "main.h"
+#include "motor_control.h"
+
 
 enum State {
 	  INIT = 0,

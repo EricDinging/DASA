@@ -4,7 +4,6 @@
  *  Created on: Mar 25, 2023
  *      Author: eric
  */
-#include "main.h"
 #include "central_control.h"
 
 void state_update() {
@@ -13,7 +12,15 @@ void state_update() {
 	// state immediately.
 
 	// All the buttons should be rising-edge triggered
-	
+
+	static uint8_t on_off = 0;
+	static uint8_t ball_locked = 0; // from AI
+	static uint8_t ball_not_found = 0; // from AI
+	static uint8_t ball_count = 0; // from IR
+	static uint8_t ball_collected = 0; // from IR
+	static uint8_t station_arrived = 0; // from AI
+	static uint8_t avoid_finished = 0; // from timer
+	static uint8_t reset = 0; // reset button
 
 	// read reset button, and set reset bit to 1 only if reset button is pressed
 	if (reset) {
@@ -23,7 +30,7 @@ void state_update() {
 		ball_count = 0;
 		ball_collected = 0;
 		station_arrived = 0;
-		avoid_end = 0;
+		avoid_finished = 0;
 		reset = 0;
 		state = INIT;
 		prev_state = state;
@@ -88,18 +95,20 @@ void state_update() {
 	case AVOID_COLLISION:
 		// only interrupt can cause the robot to enter this state
 		// only after certain conditions are met can the robot leave this state
-
-		// set timer the first time entering this state
-
-		if (on_off) {
+    
+    if (on_off) {
 			on_off = 0;
 			prev_state = RETURN;
 		}
-		if (avoid_end) {
-			avoid_end = 0;
-			next_state = prev_state;
-		}
 
+		if (avoid_finished) {
+			avoid_finished = 0;
+			next_state = prev_state;
+			if (on_off) {
+				on_off = 0;
+				next_state = RETURN;
+			}
+		}
 		break;
 	}
 
