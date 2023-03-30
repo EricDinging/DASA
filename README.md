@@ -20,4 +20,4 @@ Forward, backward, left turn, right turn, stand-still rotate
 
 ## IR sensor
 https://learn.adafruit.com/ir-breakbeam-sensors/overview
-1. The receiver is open collector transistor output which means that you do need a pull up resistor if you want to read a digital signal off the signal wire
+1. The receiver is open collector transistor output which means that a pull up resistor is needed.
