@@ -1,6 +1,9 @@
 # EECS373-DASA
 ## Road Map
-- [ ] Central control: rotor control, IR, speaker & LED 
+- [ ] Rotor control
+- [ ] IR
+- [ ] Speaker
+- [ ] LED 
 - [ ] Object detection
 - [ ] Central control: object avoidance
 
@@ -14,3 +17,7 @@ Forward, backward, left turn, right turn, stand-still rotate
 1. Nucleo control H-bridge logic input (direction of spin)
 2. Nucleo control motor speed through PWM via H-bridge enable pin (turning on and off to control spinning speed)
 3. Connect Vs on H-bridge
+
+## IR sensor
+https://learn.adafruit.com/ir-breakbeam-sensors/overview
+1. The receiver is open collector transistor output which means that you do need a pull up resistor if you want to read a digital signal off the signal wire
