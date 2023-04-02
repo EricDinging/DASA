@@ -13,14 +13,6 @@ void state_update() {
 
 	// All the buttons should be rising-edge triggered
 
-	static uint8_t on_off = 0;
-	static uint8_t ball_locked = 0; // from AI
-	static uint8_t ball_not_found = 0; // from AI
-	static uint8_t ball_count = 0; // from IR
-	static uint8_t ball_collected = 0; // from IR
-	static uint8_t station_arrived = 0; // from AI
-	static uint8_t avoid_finished = 0; // from timer
-	static uint8_t reset = 0; // reset button
 
 	// read reset button, and set reset bit to 1 only if reset button is pressed
 	if (reset) {
@@ -40,7 +32,7 @@ void state_update() {
 	}
 
 	// Testing arg begin
-	state = SEARCH;
+	state = COLLECT;
 
 	// Testing arg end
 
@@ -67,7 +59,11 @@ void state_update() {
 			next_state = RETURN;
 		}
 		break;
-	case COLLECT:
+	case COLLECT: {
+		// first time enable IR interrupt
+		uint32_t local_count;
+		local_count = count;
+
 		if (on_off) {
 			on_off = 0;
 			next_state = RETURN;
@@ -79,7 +75,12 @@ void state_update() {
 			}
 			ball_collected = 0; // clear
 		}
+
+		if (next_state != state) {
+			//  diable IR interrupt
+		}
 		break;
+		}
 	case RETURN:
 		if (on_off) {
 			on_off = 0;
@@ -125,14 +126,17 @@ void execute() {
 	case INIT:
 		break;
 	case SEARCH:
-		uint8_t mode = 0;
+//		uint8_t mode = 0;
 
 		// read RPI, change mode, set bits
-		motor_control(mode);
-		ball_locked;
-		ball_not_found;
+//		motor_control(mode);
+//		ball_locked;
+//		ball_not_found;
 		break;
 	case COLLECT:
+
+
+
 		break;
 	case RETURN:
 		break;

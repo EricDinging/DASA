@@ -34,34 +34,34 @@ $(wildcard ../makefile.init) \
 $(wildcard ../makefile.targets) \
 
 
-BUILD_ARTIFACT_NAME := central_control
+BUILD_ARTIFACT_NAME := Central_control_2
 BUILD_ARTIFACT_EXTENSION := elf
 BUILD_ARTIFACT_PREFIX :=
 BUILD_ARTIFACT := $(BUILD_ARTIFACT_PREFIX)$(BUILD_ARTIFACT_NAME)$(if $(BUILD_ARTIFACT_EXTENSION),.$(BUILD_ARTIFACT_EXTENSION),)
 
 # Add inputs and outputs from these tool invocations to the build variables 
 EXECUTABLES += \
-central_control.elf \
+Central_control_2.elf \
 
 MAP_FILES += \
-central_control.map \
+Central_control_2.map \
 
 SIZE_OUTPUT += \
 default.size.stdout \
 
 OBJDUMP_LIST += \
-central_control.list \
+Central_control_2.list \
 
 
 # All Target
 all: main-build
 
 # Main-build Target
-main-build: central_control.elf secondary-outputs
+main-build: Central_control_2.elf secondary-outputs
 
 # Tool invocations
-central_control.elf central_control.map: $(OBJS) $(USER_OBJS) /home/eric/Documents/Academic/EECS373/EECS373-DASA/central_control/STM32L4R5ZITXP_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "central_control.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"/home/eric/Documents/Academic/EECS373/EECS373-DASA/central_control/STM32L4R5ZITXP_FLASH.ld" --specs=nosys.specs -Wl,-Map="central_control.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Central_control_2.elf Central_control_2.map: $(OBJS) $(USER_OBJS) N:\eecs373\EECS373-DASA-main\central_control\STM32L4R5ZITXP_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "Central_control_2.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"N:\eecs373\EECS373-DASA-main\central_control\STM32L4R5ZITXP_FLASH.ld" --specs=nosys.specs -Wl,-Map="Central_control_2.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -70,14 +70,14 @@ default.size.stdout: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
 	@echo 'Finished building: $@'
 	@echo ' '
 
-central_control.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "central_control.list"
+Central_control_2.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "Central_control_2.list"
 	@echo 'Finished building: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) central_control.elf central_control.list central_control.map default.size.stdout
+	-$(RM) Central_control_2.elf Central_control_2.list Central_control_2.map default.size.stdout
 	-@echo ' '
 
 secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST)
