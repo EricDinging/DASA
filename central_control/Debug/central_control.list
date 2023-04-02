@@ -1,5 +1,5 @@
 
-Central_control_2.elf:     file format elf32-littlearm
+central_control.elf:     file format elf32-littlearm
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
@@ -37,13 +37,13 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  16 .debug_macro  0002df13  00000000  00000000  00043ef0  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_line   0001dd36  00000000  00000000  00071e03  2**0
+ 17 .debug_line   0001dd34  00000000  00000000  00071e03  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_str    001234b5  00000000  00000000  0008fb39  2**0
+ 18 .debug_str    001234b5  00000000  00000000  0008fb37  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .comment      00000050  00000000  00000000  001b2fee  2**0
+ 19 .comment      00000050  00000000  00000000  001b2fec  2**0
                   CONTENTS, READONLY
- 20 .debug_frame  00006f08  00000000  00000000  001b3040  2**2
+ 20 .debug_frame  00006f08  00000000  00000000  001b303c  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -529,7 +529,7 @@ void state_update() {
 		}
 
 		if (next_state != state) {
-			//  disable IR interrupt
+			//  diable IR interrupt
 		}
 		break;
  80005e4:	e046      	b.n	8000674 <state_update+0x174>
@@ -2973,17 +2973,17 @@ static void MX_TIM3_Init(void)
  8001360:	4b2b      	ldr	r3, [pc, #172]	; (8001410 <MX_TIM3_Init+0xdc>)
  8001362:	4a2c      	ldr	r2, [pc, #176]	; (8001414 <MX_TIM3_Init+0xe0>)
  8001364:	601a      	str	r2, [r3, #0]
-  htim3.Init.Prescaler = 32000;
+  htim3.Init.Prescaler = 3999;
  8001366:	4b2a      	ldr	r3, [pc, #168]	; (8001410 <MX_TIM3_Init+0xdc>)
- 8001368:	f44f 42fa 	mov.w	r2, #32000	; 0x7d00
+ 8001368:	f640 729f 	movw	r2, #3999	; 0xf9f
  800136c:	605a      	str	r2, [r3, #4]
   htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
  800136e:	4b28      	ldr	r3, [pc, #160]	; (8001410 <MX_TIM3_Init+0xdc>)
  8001370:	2200      	movs	r2, #0
  8001372:	609a      	str	r2, [r3, #8]
-  htim3.Init.Period = 32000;
+  htim3.Init.Period = 1999;
  8001374:	4b26      	ldr	r3, [pc, #152]	; (8001410 <MX_TIM3_Init+0xdc>)
- 8001376:	f44f 42fa 	mov.w	r2, #32000	; 0x7d00
+ 8001376:	f240 72cf 	movw	r2, #1999	; 0x7cf
  800137a:	60da      	str	r2, [r3, #12]
   htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
  800137c:	4b24      	ldr	r3, [pc, #144]	; (8001410 <MX_TIM3_Init+0xdc>)
@@ -5683,9 +5683,9 @@ void TIM3_IRQHandler(void)
 	const uint32_t THRESHOD = 500;
  80023d2:	f44f 73fa 	mov.w	r3, #500	; 0x1f4
  80023d6:	607b      	str	r3, [r7, #4]
+	extern uint8_t ball_count;
 
 	extern uint32_t count;
-
 	static uint8_t mode = 0;
 
 	if (mode == 0) {
@@ -5698,17 +5698,17 @@ void TIM3_IRQHandler(void)
  80023e0:	4b1e      	ldr	r3, [pc, #120]	; (800245c <TIM3_IRQHandler+0x90>)
  80023e2:	2200      	movs	r2, #0
  80023e4:	625a      	str	r2, [r3, #36]	; 0x24
-		TIM3->CCER &= ~(0b1 << 5);
+		TIM3->CCER &= ~(0b1 << 1);
  80023e6:	4b1d      	ldr	r3, [pc, #116]	; (800245c <TIM3_IRQHandler+0x90>)
  80023e8:	6a1b      	ldr	r3, [r3, #32]
  80023ea:	4a1c      	ldr	r2, [pc, #112]	; (800245c <TIM3_IRQHandler+0x90>)
- 80023ec:	f023 0320 	bic.w	r3, r3, #32
+ 80023ec:	f023 0302 	bic.w	r3, r3, #2
  80023f0:	6213      	str	r3, [r2, #32]
-		TIM3->CCER &= ~(0b1 << 7);
+		TIM3->CCER &= ~(0b1 << 3);
  80023f2:	4b1a      	ldr	r3, [pc, #104]	; (800245c <TIM3_IRQHandler+0x90>)
  80023f4:	6a1b      	ldr	r3, [r3, #32]
  80023f6:	4a19      	ldr	r2, [pc, #100]	; (800245c <TIM3_IRQHandler+0x90>)
- 80023f8:	f023 0380 	bic.w	r3, r3, #128	; 0x80
+ 80023f8:	f023 0308 	bic.w	r3, r3, #8
  80023fc:	6213      	str	r3, [r2, #32]
 		mode = 1;
  80023fe:	4b16      	ldr	r3, [pc, #88]	; (8002458 <TIM3_IRQHandler+0x8c>)
@@ -5744,17 +5744,17 @@ void TIM3_IRQHandler(void)
  800242a:	701a      	strb	r2, [r3, #0]
 		}
 
-		TIM3->CCER |= (0b1 << 5);
+		TIM3->CCER |= (0b1 << 1);
  800242c:	4b0b      	ldr	r3, [pc, #44]	; (800245c <TIM3_IRQHandler+0x90>)
  800242e:	6a1b      	ldr	r3, [r3, #32]
  8002430:	4a0a      	ldr	r2, [pc, #40]	; (800245c <TIM3_IRQHandler+0x90>)
- 8002432:	f043 0320 	orr.w	r3, r3, #32
+ 8002432:	f043 0302 	orr.w	r3, r3, #2
  8002436:	6213      	str	r3, [r2, #32]
-		TIM3->CCER &= ~(0b1 << 7);
+		TIM3->CCER &= ~(0b1 << 3);
  8002438:	4b08      	ldr	r3, [pc, #32]	; (800245c <TIM3_IRQHandler+0x90>)
  800243a:	6a1b      	ldr	r3, [r3, #32]
  800243c:	4a07      	ldr	r2, [pc, #28]	; (800245c <TIM3_IRQHandler+0x90>)
- 800243e:	f023 0380 	bic.w	r3, r3, #128	; 0x80
+ 800243e:	f023 0308 	bic.w	r3, r3, #8
  8002442:	6213      	str	r3, [r2, #32]
 		mode = 0;
  8002444:	4b04      	ldr	r3, [pc, #16]	; (8002458 <TIM3_IRQHandler+0x8c>)

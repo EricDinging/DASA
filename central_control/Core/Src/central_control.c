@@ -77,7 +77,7 @@ void state_update() {
 		}
 
 		if (next_state != state) {
-			//  diable IR interrupt
+			//  disable IR interrupt
 		}
 		break;
 		}

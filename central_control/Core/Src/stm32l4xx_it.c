@@ -220,17 +220,19 @@ void TIM3_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM3_IRQn 0 */
 	const uint32_t THRESHOD = 500;
+
 	extern uint8_t ball_collected;
 	extern uint8_t ball_count;
 
 	extern uint32_t count;
+
 	static uint8_t mode = 0;
 
 	if (mode == 0) {
 		// falling edge
 		TIM3->CNT = 0;
-		TIM3->CCER &= ~(0b1 << 1);
-		TIM3->CCER &= ~(0b1 << 3);
+		TIM3->CCER &= ~(0b1 << 5);
+		TIM3->CCER &= ~(0b1 << 7);
 		mode = 1;
 	} else {
 		// rising edge;
@@ -242,8 +244,8 @@ void TIM3_IRQHandler(void)
 			 ball_count++;
 		}
 
-		TIM3->CCER |= (0b1 << 1);
-		TIM3->CCER &= ~(0b1 << 3);
+		TIM3->CCER |= (0b1 << 5);
+		TIM3->CCER &= ~(0b1 << 7);
 		mode = 0;
 	}
 
