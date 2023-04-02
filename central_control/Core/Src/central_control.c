@@ -36,7 +36,8 @@ void state_update() {
 
 	// Testing arg end
 
-	// disable interrupt
+	// disable interrupt ultrasonic, ir
+	HAL_NVIC_DisableIRQ(TIM3_IRQn);
 
 	enum State next_state = state;
 
@@ -60,7 +61,6 @@ void state_update() {
 		}
 		break;
 	case COLLECT: {
-		// first time enable IR interrupt
 		uint32_t local_count;
 		local_count = count;
 
@@ -74,10 +74,6 @@ void state_update() {
 				next_state = RETURN;
 			}
 			ball_collected = 0; // clear
-		}
-
-		if (next_state != state) {
-			//  disable IR interrupt
 		}
 		break;
 		}
@@ -119,9 +115,15 @@ void state_update() {
 	}
 
 	// enable interrupt
+	if (state == COLLECT) {
+		HAL_NVIC_EnableIRQ(TIM3_IRQn);
+	}
 }
 
 void execute() {
+
+	rotor_control(1);
+
 	switch (state) {
 	case INIT:
 		break;
@@ -134,8 +136,7 @@ void execute() {
 //		ball_not_found;
 		break;
 	case COLLECT:
-
-
+		rotor_control(0);
 
 		break;
 	case RETURN:

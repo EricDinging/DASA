@@ -167,6 +167,7 @@ int main(void)
   {
 	  state_update();
 	  execute();
+	  HAL_Delay(5000);
 	  // motor control
 //	  motor_control(5);
 //	  HAL_Delay(5000);
