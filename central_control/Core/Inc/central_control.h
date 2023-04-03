@@ -11,6 +11,7 @@
 
 #include "main.h"
 #include "motor_control.h"
+#include "rotor_control.h"
 
 
 enum State {
@@ -30,10 +31,14 @@ uint8_t ball_not_found = 0; // from AI
 uint8_t ball_count = 0; // from IR
 uint8_t ball_collected = 0; // from IR
 uint8_t station_arrived = 0; // from AI
-uint8_t avoid_end = 0; // from timer
+uint8_t avoid_finished = 0; // from timer
 uint8_t reset = 0; // reset button
 
+// testing
+uint32_t count = 0;
+
 #define MAXLOAD 6
+
 
 void state_update();
 
