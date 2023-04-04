@@ -1,0 +1,9 @@
+../Core/Src/Pixy2.c:8:6:printVersion	96	static
+../Core/Src/Pixy2.c:15:6:printBlock	224	static
+../Core/Src/Pixy2.c:40:9:getSync	24	static
+../Core/Src/Pixy2.c:79:9:recvPacket	16	static
+../Core/Src/Pixy2.c:119:9:sendPacket	8	static
+../Core/Src/Pixy2.c:129:8:getVersion	8	static
+../Core/Src/Pixy2.c:143:8:getResolution	8	static
+../Core/Src/Pixy2.c:159:8:getBlocks	24	static
+../Core/Src/Pixy2.c:196:8:pixy2_init	32	static

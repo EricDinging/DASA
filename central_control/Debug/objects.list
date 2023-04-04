@@ -1,3 +1,5 @@
+"./Core/Src/Pixy2.o"
+"./Core/Src/Pixy2SPI_SS.o"
 "./Core/Src/central_control.o"
 "./Core/Src/main.o"
 "./Core/Src/motor_control.o"
