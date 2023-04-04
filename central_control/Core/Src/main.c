@@ -18,6 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "Pixy2.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -44,7 +45,6 @@ ADC_HandleTypeDef hadc1;
 CAN_HandleTypeDef hcan1;
 
 COMP_HandleTypeDef hcomp1;
-COMP_HandleTypeDef hcomp2;
 
 SMBUS_HandleTypeDef hsmbus1;
 SMBUS_HandleTypeDef hsmbus2;
@@ -77,7 +77,6 @@ static void MX_GPIO_Init(void);
 static void MX_ADC1_Init(void);
 static void MX_CAN1_Init(void);
 static void MX_COMP1_Init(void);
-static void MX_COMP2_Init(void);
 static void MX_I2C1_SMBUS_Init(void);
 static void MX_I2C2_SMBUS_Init(void);
 static void MX_LPUART1_UART_Init(void);
@@ -142,7 +141,6 @@ int main(void)
   MX_ADC1_Init();
   MX_CAN1_Init();
   MX_COMP1_Init();
-  MX_COMP2_Init();
   MX_I2C1_SMBUS_Init();
   MX_I2C2_SMBUS_Init();
   MX_LPUART1_UART_Init();
@@ -169,6 +167,9 @@ int main(void)
   HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_4);
   HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
   HAL_TIM_IC_Start_IT(&htim3, TIM_CHANNEL_2);
+
+  extern Pixy2 pixy;
+  pixy2_init(&hspi1, GPIOB, GPIO_PIN_6);
 
 
   while (1)
@@ -446,40 +447,6 @@ static void MX_COMP1_Init(void)
   /* USER CODE BEGIN COMP1_Init 2 */
 
   /* USER CODE END COMP1_Init 2 */
-
-}
-
-/**
-  * @brief COMP2 Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_COMP2_Init(void)
-{
-
-  /* USER CODE BEGIN COMP2_Init 0 */
-
-  /* USER CODE END COMP2_Init 0 */
-
-  /* USER CODE BEGIN COMP2_Init 1 */
-
-  /* USER CODE END COMP2_Init 1 */
-  hcomp2.Instance = COMP2;
-  hcomp2.Init.InvertingInput = COMP_INPUT_MINUS_IO2;
-  hcomp2.Init.NonInvertingInput = COMP_INPUT_PLUS_IO2;
-  hcomp2.Init.OutputPol = COMP_OUTPUTPOL_NONINVERTED;
-  hcomp2.Init.Hysteresis = COMP_HYSTERESIS_NONE;
-  hcomp2.Init.BlankingSrce = COMP_BLANKINGSRC_NONE;
-  hcomp2.Init.Mode = COMP_POWERMODE_HIGHSPEED;
-  hcomp2.Init.WindowMode = COMP_WINDOWMODE_DISABLE;
-  hcomp2.Init.TriggerMode = COMP_TRIGGERMODE_NONE;
-  if (HAL_COMP_Init(&hcomp2) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN COMP2_Init 2 */
-
-  /* USER CODE END COMP2_Init 2 */
 
 }
 
@@ -850,17 +817,17 @@ static void MX_SPI1_Init(void)
   hspi1.Instance = SPI1;
   hspi1.Init.Mode = SPI_MODE_MASTER;
   hspi1.Init.Direction = SPI_DIRECTION_2LINES;
-  hspi1.Init.DataSize = SPI_DATASIZE_4BIT;
+  hspi1.Init.DataSize = SPI_DATASIZE_8BIT;
   hspi1.Init.CLKPolarity = SPI_POLARITY_LOW;
   hspi1.Init.CLKPhase = SPI_PHASE_1EDGE;
-  hspi1.Init.NSS = SPI_NSS_HARD_OUTPUT;
-  hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_2;
+  hspi1.Init.NSS = SPI_NSS_SOFT;
+  hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_16;
   hspi1.Init.FirstBit = SPI_FIRSTBIT_MSB;
   hspi1.Init.TIMode = SPI_TIMODE_DISABLE;
   hspi1.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
   hspi1.Init.CRCPolynomial = 7;
   hspi1.Init.CRCLength = SPI_CRC_LENGTH_DATASIZE;
-  hspi1.Init.NSSPMode = SPI_NSS_PULSE_ENABLE;
+  hspi1.Init.NSSPMode = SPI_NSS_PULSE_DISABLE;
   if (HAL_SPI_Init(&hspi1) != HAL_OK)
   {
     Error_Handler();
@@ -1304,6 +1271,9 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOG, GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_3|GPIO_PIN_4
                           |GPIO_PIN_5|GPIO_PIN_6, GPIO_PIN_RESET);
 
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_RESET);
+
   /*Configure GPIO pins : PG1 PG2 PG3 PG4
                            PG5 PG6 */
   GPIO_InitStruct.Pin = GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_3|GPIO_PIN_4
@@ -1344,6 +1314,13 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
   GPIO_InitStruct.Alternate = GPIO_AF12_SDMMC1;
   HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : PB6 */
+  GPIO_InitStruct.Pin = GPIO_PIN_6;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
 }
 
