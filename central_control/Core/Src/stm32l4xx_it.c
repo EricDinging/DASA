@@ -22,6 +22,9 @@
 #include "stm32l4xx_it.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "central_control.h"
+#include "stdio.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -57,6 +60,7 @@
 /* External variables --------------------------------------------------------*/
 extern TIM_HandleTypeDef htim1;
 extern TIM_HandleTypeDef htim3;
+extern TIM_HandleTypeDef htim5;
 /* USER CODE BEGIN EV */
 
 /* USER CODE END EV */
@@ -205,6 +209,31 @@ void SysTick_Handler(void)
 void TIM1_CC_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM1_CC_IRQn 0 */
+	static uint8_t mode = 0;
+
+	extern enum State state;
+	const float threshod = 12.0;
+
+	if (mode == 0) {
+		// rising edge
+		TIM1->CNT = 0;
+		TIM1->CCER |= (0b1 << 1);
+		TIM1->CCER &= ~(0b1 << 3);
+		mode = 1;
+	} else {
+		// falling edge
+		uint16_t local_count = TIM1->CNT;
+		float distance = (float)local_count * 1.0 / 144;
+		printf("Distance: %f\n", distance);
+
+		if (distance < threshod) {
+			state = AVOID_COLLISION;
+		}
+
+		TIM1->CCER &= ~(0b1 << 1);
+		TIM1->CCER &= ~(0b1 << 3);
+		mode = 0;
+	}
 
   /* USER CODE END TIM1_CC_IRQn 0 */
   HAL_TIM_IRQHandler(&htim1);
@@ -219,7 +248,7 @@ void TIM1_CC_IRQHandler(void)
 void TIM3_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM3_IRQn 0 */
-	const uint32_t THRESHOD = 500;
+	const uint32_t THRESHOD = 15;
 
 	extern uint8_t ball_collected;
 	extern uint8_t ball_count;
@@ -255,6 +284,24 @@ void TIM3_IRQHandler(void)
   /* USER CODE BEGIN TIM3_IRQn 1 */
 
   /* USER CODE END TIM3_IRQn 1 */
+}
+
+/**
+  * @brief This function handles TIM5 global interrupt.
+  */
+void TIM5_IRQHandler(void)
+{
+  /* USER CODE BEGIN TIM5_IRQn 0 */
+	extern uint8_t avoid_finished;
+	if (avoid_finished == 0) {
+		avoid_finished = 1;
+	}
+	printf("Avoid_Collision: Timer 5 seconds\n");
+  /* USER CODE END TIM5_IRQn 0 */
+  HAL_TIM_IRQHandler(&htim5);
+  /* USER CODE BEGIN TIM5_IRQn 1 */
+
+  /* USER CODE END TIM5_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */

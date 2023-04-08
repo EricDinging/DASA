@@ -1,2 +1,3 @@
-central_control.c:9:6:state_update	21
-central_control.c:123:6:execute	3
+central_control.c:32:6:state_update	25
+central_control.c:174:9:get_mode	8
+central_control.c:209:6:execute	6

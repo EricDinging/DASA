@@ -27,7 +27,7 @@ void rotor_control (uint8_t mode) {
 			break;
 	}
 
-	htim4.Instance->CCR2 = motor_pwm_val; // PD13
-	HAL_GPIO_WritePin(GPIOG, GPIO_PIN_2,  motor_h_bridge_in1);
+	htim4.Instance->CCR1 = motor_pwm_val; // PD13
+	HAL_GPIO_WritePin(GPIOG, GPIO_PIN_0,  motor_h_bridge_in1);
 	HAL_GPIO_WritePin(GPIOG, GPIO_PIN_1,  motor_h_bridge_in2);
 }

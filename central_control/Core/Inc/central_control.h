@@ -13,6 +13,8 @@
 #include "motor_control.h"
 #include "rotor_control.h"
 
+extern TIM_HandleTypeDef htim5;
+
 
 enum State {
 	  INIT = 0,
@@ -21,21 +23,6 @@ enum State {
 	  RETURN = 3,
 	  AVOID_COLLISION = 4
   };
-
-enum State state;
-enum State prev_state;
-
-uint8_t on_off = 0;
-uint8_t ball_locked = 0; // from AI
-uint8_t ball_not_found = 0; // from AI
-uint8_t ball_count = 0; // from IR
-uint8_t ball_collected = 0; // from IR
-uint8_t station_arrived = 0; // from AI
-uint8_t avoid_finished = 0; // from timer
-uint8_t reset = 0; // reset button
-
-// testing
-uint32_t count = 0;
 
 #define MAXLOAD 6
 

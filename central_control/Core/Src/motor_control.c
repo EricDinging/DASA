@@ -24,18 +24,18 @@ void motor_control (uint8_t mode) {
 			rmotor_h_bridge_in4 = 0;
 			break;
 		case 1:
-			lmotor_pwm_val = 0;
+			lmotor_pwm_val = 30;
 			rmotor_pwm_val = 30;
 			lmotor_h_bridge_in1 = 1;
 			lmotor_h_bridge_in2 = 0;
-			rmotor_h_bridge_in3 = 1;
-			rmotor_h_bridge_in4 = 0;
+			rmotor_h_bridge_in3 = 0;
+			rmotor_h_bridge_in4 = 1;
 			break;
 		case 2:
 			lmotor_pwm_val = 30;
-			rmotor_pwm_val = 0;
-			lmotor_h_bridge_in1 = 1;
-			lmotor_h_bridge_in2 = 0;
+			rmotor_pwm_val = 30;
+			lmotor_h_bridge_in1 = 0;
+			lmotor_h_bridge_in2 = 1;
 			rmotor_h_bridge_in3 = 1;
 			rmotor_h_bridge_in4 = 0;
 			break;
@@ -75,9 +75,9 @@ void motor_control (uint8_t mode) {
 
 	htim4.Instance->CCR3 = lmotor_pwm_val; // PD14 to EnA
 	htim4.Instance->CCR4 = rmotor_pwm_val; // PD15 to EnB
-	HAL_GPIO_WritePin(GPIOG, GPIO_PIN_6,  lmotor_h_bridge_in1);
-	HAL_GPIO_WritePin(GPIOG, GPIO_PIN_5,  lmotor_h_bridge_in2);
-	HAL_GPIO_WritePin(GPIOG, GPIO_PIN_4,  rmotor_h_bridge_in3);
-	HAL_GPIO_WritePin(GPIOG, GPIO_PIN_3,  rmotor_h_bridge_in4);
+	HAL_GPIO_WritePin(GPIOF, GPIO_PIN_7,  lmotor_h_bridge_in1);
+	HAL_GPIO_WritePin(GPIOF, GPIO_PIN_8,  lmotor_h_bridge_in2);
+	HAL_GPIO_WritePin(GPIOF, GPIO_PIN_12,  rmotor_h_bridge_in3);
+	HAL_GPIO_WritePin(GPIOF, GPIO_PIN_13,  rmotor_h_bridge_in4);
 }
 
