@@ -7,7 +7,7 @@
 #include "motor_control.h"
 
 void motor_control (uint8_t mode) {
-	// mode 0 straight, 1 left turn, 2 right turn, 3 still-rotation, 4 reverse, 5 nitroboost
+	// mode 0 straight, 1 left turn, 2 right turn, 3 still-rotation, 4 reverse, 5 nitroboost, 6 collect
 	static uint8_t lmotor_pwm_val = 20; // 0 - 99 throttle control
 	static uint8_t rmotor_pwm_val = 20;
 	static uint8_t lmotor_h_bridge_in1 = 1;
@@ -24,32 +24,32 @@ void motor_control (uint8_t mode) {
 			rmotor_h_bridge_in4 = 0;
 			break;
 		case 1:
-			lmotor_pwm_val = 30;
-			rmotor_pwm_val = 30;
-			lmotor_h_bridge_in1 = 1;
-			lmotor_h_bridge_in2 = 0;
-			rmotor_h_bridge_in3 = 0;
-			rmotor_h_bridge_in4 = 1;
-			break;
-		case 2:
-			lmotor_pwm_val = 30;
-			rmotor_pwm_val = 30;
+			lmotor_pwm_val = 70;
+			rmotor_pwm_val = 70;
 			lmotor_h_bridge_in1 = 0;
 			lmotor_h_bridge_in2 = 1;
 			rmotor_h_bridge_in3 = 1;
 			rmotor_h_bridge_in4 = 0;
 			break;
-		case 3:
-			lmotor_pwm_val = 15;
-			rmotor_pwm_val = 15;
+		case 2:
+			lmotor_pwm_val = 70;
+			rmotor_pwm_val = 70;
 			lmotor_h_bridge_in1 = 1;
 			lmotor_h_bridge_in2 = 0;
 			rmotor_h_bridge_in3 = 0;
 			rmotor_h_bridge_in4 = 1;
 			break;
+		case 3:
+			lmotor_pwm_val = 70;
+			rmotor_pwm_val = 70;
+			lmotor_h_bridge_in1 = 0;
+			lmotor_h_bridge_in2 = 1;
+			rmotor_h_bridge_in3 = 1;
+			rmotor_h_bridge_in4 = 0;
+			break;
 		case 4:
-			lmotor_pwm_val = 30;
-			rmotor_pwm_val = 30;
+			lmotor_pwm_val = 50;
+			rmotor_pwm_val = 50;
 			lmotor_h_bridge_in1 = 0;
 			lmotor_h_bridge_in2 = 1;
 			rmotor_h_bridge_in3 = 0;
@@ -58,6 +58,14 @@ void motor_control (uint8_t mode) {
 		case 5:
 			lmotor_pwm_val = 100;
 			rmotor_pwm_val = 100;
+			lmotor_h_bridge_in1 = 1;
+			lmotor_h_bridge_in2 = 0;
+			rmotor_h_bridge_in3 = 1;
+			rmotor_h_bridge_in4 = 0;
+			break;
+		case 6:
+			lmotor_pwm_val = 30;
+			rmotor_pwm_val = 30;
 			lmotor_h_bridge_in1 = 1;
 			lmotor_h_bridge_in2 = 0;
 			rmotor_h_bridge_in3 = 1;

@@ -55,14 +55,6 @@ void state_update() {
 		// reading peripheral input, and clear register immediately
 	}
 
-	// Testing arg begin
-
-	enum State local_state = state;
-	state = SEARCH;
-	local_state = state;
-
-	// Testing arg end
-
 	// disable interrupt ultrasonic, ir
 	HAL_NVIC_DisableIRQ(TIM3_IRQn);
 	HAL_NVIC_DisableIRQ(TIM1_CC_IRQn);
@@ -90,7 +82,7 @@ void state_update() {
 		}
 		break;
 	case COLLECT: {
-//		printf("Collect: mode enter\n");
+		printf("Collect: mode enter\n");
 		uint32_t local_count;
 		local_count = count;
 
@@ -98,8 +90,17 @@ void state_update() {
 			on_off = 0;
 			next_state = RETURN;
 		} else if (ball_collected) {
+
+			__HAL_TIM_CLEAR_FLAG(&htim5, TIM_SR_UIF);
+			TIM5->ARR = 100;
+			TIM5->CNT = 0;
+			HAL_TIM_Base_Start_IT(&htim5);
+			HAL_NVIC_EnableIRQ(TIM5_IRQn); // speaker
+			HAL_GPIO_WritePin(GPIOE, GPIO_PIN_7,  1);
+
+			printf("Collect: Ball_collected, ball_count: %d\n", ball_count);
+
 			if (ball_count <= MAXLOAD) {
-				printf("Collect: Ball_collected, ball_count: %d\n", ball_count);
 				next_state = SEARCH;
 			} else {
 				next_state = RETURN;
@@ -153,17 +154,26 @@ void state_update() {
 		prev_state = state;
 	}
 
+	// Testing arg begin
+	state = COLLECT;
+	if (state != AVOID_COLLISION) {
+		prev_state = state;
+	}
+	// Testing arg end
+
+
 	// enable interrupt
 	if (state == COLLECT) {
 		HAL_NVIC_EnableIRQ(TIM3_IRQn);
+//		HAL_NVIC_EnableIRQ(TIM5_IRQn); // speaker
 	} else if (state == RETURN || state == SEARCH) {
 		HAL_NVIC_EnableIRQ(TIM1_CC_IRQn);
 	} else if (state == AVOID_COLLISION) {
 		if (avoid_begin == 0) {
-//			 __HAL_TIM_CLEAR_IT(&htim5, TIM_IT_UPDATE);
 			__HAL_TIM_CLEAR_FLAG(&htim5, TIM_SR_UIF);
 			avoid_begin = 1;
-			TIM5->CNT= 0;
+			TIM5->ARR = 5000;
+			TIM5->CNT = 0;
 			printf("Avoid_Collision: timer begin\n");
 			HAL_TIM_Base_Start_IT(&htim5);
 		}
@@ -207,22 +217,35 @@ uint8_t get_mode() { // TODO::: ADD IF WE ARE SEARCHING FOR HOME BASE
 
 
 void execute() {
-
+	//default
 	rotor_control(1);
+	motor_control(7);
+	//led
+	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_8,  0);
+	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_9,  0);
+	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_10, 0);
+	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_11, 0);
 
 	switch (state) {
 	case INIT:
+		HAL_GPIO_WritePin(GPIOC, GPIO_PIN_8,  1); // white led
 		break;
 	case SEARCH: {
 //		uint8_t motor_mode = get_mode();
 //		motor_control(motor_mode);
-
+		HAL_GPIO_WritePin(GPIOC, GPIO_PIN_9,  1); // blue led
 
 		while (1) {
 			static uint8_t local_motor_mode = 0;
-			if (local_motor_mode == 7) local_motor_mode = 0;
+			if (local_motor_mode == 8) local_motor_mode = 0;
 			printf("Search: motor mode %d\n", local_motor_mode);
 			motor_control(local_motor_mode);
+
+//			if (local_motor_mode == 0 || local_motor_mode == 4 || local_motor_mode == 5 || local_motor_mode == 6) {
+//				HAL_Delay(1000);
+//			} else {
+//				HAL_Delay(5000);
+//			}
 
 			HAL_Delay(5000);
 			local_motor_mode++;
@@ -234,13 +257,19 @@ void execute() {
 		break;
 	}
 	case COLLECT:
+
+		HAL_GPIO_WritePin(GPIOC, GPIO_PIN_10, 1); // green led
 		rotor_control(0);
+		motor_control(0);
 
 		break;
 	case RETURN:
+
+		HAL_GPIO_WritePin(GPIOC, GPIO_PIN_8,  1); // white led
 		break;
 	case AVOID_COLLISION:
 
+		HAL_GPIO_WritePin(GPIOC, GPIO_PIN_11, 1); // red led
 		motor_control(1);
 		break;
 	}

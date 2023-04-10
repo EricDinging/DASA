@@ -17,14 +17,14 @@ extern TIM_HandleTypeDef htim5;
 
 
 enum State {
-	  INIT = 0,
-	  SEARCH = 1,
-	  COLLECT = 2,
-	  RETURN = 3,
-	  AVOID_COLLISION = 4
+	  INIT = 0, // white
+	  SEARCH = 1, // blue
+	  COLLECT = 2, // green
+	  RETURN = 3, // white
+	  AVOID_COLLISION = 4 // red
   };
 
-#define MAXLOAD 6
+#define MAXLOAD 600
 
 
 void state_update();

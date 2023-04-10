@@ -248,7 +248,7 @@ void TIM1_CC_IRQHandler(void)
 void TIM3_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM3_IRQn 0 */
-	const uint32_t THRESHOD = 15;
+	const uint32_t THRESHOD = 50;
 
 	extern uint8_t ball_collected;
 	extern uint8_t ball_count;
@@ -269,8 +269,9 @@ void TIM3_IRQHandler(void)
 		count = local_count;
 
 		if (local_count > THRESHOD) {
-			 ball_collected = 1;
-			 ball_count++;
+			printf("IR interrupt: Local_count %d\n", local_count);
+			ball_collected = 1;
+			ball_count++;
 		}
 
 		TIM3->CCER |= (0b1 << 5);
@@ -292,11 +293,18 @@ void TIM3_IRQHandler(void)
 void TIM5_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM5_IRQn 0 */
-	extern uint8_t avoid_finished;
-	if (avoid_finished == 0) {
-		avoid_finished = 1;
+	extern enum State state;
+	if (state == AVOID_COLLISION) {
+		extern uint8_t avoid_finished;
+		if (avoid_finished == 0) {
+			avoid_finished = 1;
+		}
+		printf("Avoid_Collision: Timer 5 seconds\n");
+	} else if (state == COLLECT) {
+		HAL_GPIO_WritePin(GPIOE, GPIO_PIN_7,  0);
+		HAL_TIM_Base_Stop_IT(&htim5);
 	}
-	printf("Avoid_Collision: Timer 5 seconds\n");
+
   /* USER CODE END TIM5_IRQn 0 */
   HAL_TIM_IRQHandler(&htim5);
   /* USER CODE BEGIN TIM5_IRQn 1 */

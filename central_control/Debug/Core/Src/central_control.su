@@ -1,3 +1,3 @@
 ../Core/Src/central_control.c:32:6:state_update	16	static
-../Core/Src/central_control.c:174:9:get_mode	32	static
-../Core/Src/central_control.c:209:6:execute	8	static
+../Core/Src/central_control.c:184:9:get_mode	32	static
+../Core/Src/central_control.c:219:6:execute	8	static
