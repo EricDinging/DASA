@@ -1,5 +1,5 @@
 ../Core/Src/central_control.c:51:6:dumb_loop	24	static
 ../Core/Src/central_control.c:56:6:state_update	16	static
-../Core/Src/central_control.c:245:9:get_mode	32	static
-../Core/Src/central_control.c:296:9:return_mode	32	static
-../Core/Src/central_control.c:344:6:execute	16	static
+../Core/Src/central_control.c:246:9:get_mode	32	static
+../Core/Src/central_control.c:297:9:return_mode	32	static
+../Core/Src/central_control.c:347:6:execute	16	static

@@ -181,6 +181,7 @@ void state_update() {
 			if (return_near_station == 1) {
 				__HAL_TIM_CLEAR_IT(&htim1, TIM_IT_CC1); // clear ultrasonic interrup
 				ultrasonic_on = 0;
+				return_near_station = 0;
 			} else {
 				ultrasonic_on = 1;
 			}
@@ -329,6 +330,8 @@ uint8_t return_mode() {
 			if(best_size >= RETURN_STOP_SIZE) {
 				printf("---------Return\n");
 				station_arrived = 1;
+			} else {
+				station_arrived = 0;
 			}
 			return 0;
 		}
