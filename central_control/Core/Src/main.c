@@ -171,63 +171,10 @@ int main(void)
 
   while (1)
   {
-//	  int8_t bruh = getBlocks(true, 1, 0xff);
-//	  printf("Finding: %i blocks\n", bruh);
-//	  if(bruh >= 1) {
-//		  for(int i = 0; i < bruh; ++i) {
-//			  printBlock(i);
-//		  }
-//	  }
 //	  printf("main\n");
 	  state_update();
 	  execute();
 	  delay_loop(2000); // 0.1ms
-
-	  // motor control
-//	  motor_control(5);
-//	  HAL_Delay(5000);
-//
-//	  motor_control(0);
-//	  HAL_Delay(5000);
-//
-//	  motor_control(2);
-//	  HAL_Delay(5000);
-
-
-
-//	  motor_control(1);
-//	  HAL_Delay(1000);
-//	  motor_control(2);
-//	  HAL_Delay(1000);
-//	  motor_control(3);
-//	  HAL_Delay(1000);
-//	  motor_control(4);
-//	  HAL_Delay(1000);
-//	  motor_control(5);
-//	  HAL_Delay(1000);
-//	  for (int i = 0; i < 4; i++) {
-//		  switch(i) {
-//		  case 0:
-//			  mode = 0;
-//			  motor_control(mode);
-//			  HAL_Delay(5000);
-//			  break;
-//		  case 1:
-//			  mode = 1;
-//			  motor_control(mode);
-//			  HAL_Delay(5000);
-//			  break;
-//		  case 2:
-//			  mode = 2;
-//			  motor_control(mode);
-//			  HAL_Delay(5000);
-//			  break;
-//		  default:
-//			  mode = 4;
-//			  motor_control(mode);
-//			  HAL_Delay(5000);
-//		  }
-//	  }
 
     /* USER CODE END WHILE */
 
@@ -1199,12 +1146,24 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Alternate = GPIO_AF13_SAI1;
   HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
 
+  /*Configure GPIO pin : PE5 */
+  GPIO_InitStruct.Pin = GPIO_PIN_5;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
+
   /*Configure GPIO pins : PF7 PF8 PF12 PF13 */
   GPIO_InitStruct.Pin = GPIO_PIN_7|GPIO_PIN_8|GPIO_PIN_12|GPIO_PIN_13;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : PA3 */
+  GPIO_InitStruct.Pin = GPIO_PIN_3;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   /*Configure GPIO pin : PB2 */
   GPIO_InitStruct.Pin = GPIO_PIN_2;
@@ -1265,6 +1224,13 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
   GPIO_InitStruct.Alternate = GPIO_AF12_SDMMC1;
   HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
+
+  /* EXTI interrupt init*/
+  HAL_NVIC_SetPriority(EXTI3_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI3_IRQn);
+
+  HAL_NVIC_SetPriority(EXTI9_5_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI9_5_IRQn);
 
 }
 

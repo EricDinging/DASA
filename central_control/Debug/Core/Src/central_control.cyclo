@@ -1,0 +1,5 @@
+central_control.c:46:6:dumb_loop	3
+central_control.c:51:6:state_update	24
+central_control.c:235:9:get_mode	9
+central_control.c:281:9:return_mode	9
+central_control.c:324:6:execute	10

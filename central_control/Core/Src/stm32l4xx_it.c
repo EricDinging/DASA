@@ -204,6 +204,36 @@ void SysTick_Handler(void)
 /******************************************************************************/
 
 /**
+  * @brief This function handles EXTI line3 interrupt.
+  */
+void EXTI3_IRQHandler(void)
+{
+  /* USER CODE BEGIN EXTI3_IRQn 0 */
+	reset = 1;
+
+  /* USER CODE END EXTI3_IRQn 0 */
+  HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_3);
+  /* USER CODE BEGIN EXTI3_IRQn 1 */
+
+  /* USER CODE END EXTI3_IRQn 1 */
+}
+
+/**
+  * @brief This function handles EXTI line[9:5] interrupts.
+  */
+void EXTI9_5_IRQHandler(void)
+{
+  /* USER CODE BEGIN EXTI9_5_IRQn 0 */
+	on_off = 1;
+
+  /* USER CODE END EXTI9_5_IRQn 0 */
+  HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_5);
+  /* USER CODE BEGIN EXTI9_5_IRQn 1 */
+
+  /* USER CODE END EXTI9_5_IRQn 1 */
+}
+
+/**
   * @brief This function handles TIM1 capture compare interrupt.
   */
 void TIM1_CC_IRQHandler(void)
@@ -212,7 +242,9 @@ void TIM1_CC_IRQHandler(void)
 	static uint8_t mode = 0;
 
 	extern enum State state;
-	const float threshod = 12.0;
+	const float threshod = 16.0;
+
+	static float record[3] = {100.0, 100.0, 100.0};
 
 	if (mode == 0) {
 		// rising edge
@@ -224,9 +256,28 @@ void TIM1_CC_IRQHandler(void)
 		// falling edge
 		uint16_t local_count = TIM1->CNT;
 		float distance = (float)local_count * 1.0 / 144;
+
+		for (int i = 0; i < 2; i++) {
+			record[i] = record[i+1];
+		}
+
+		record[2] = distance;
+
 		printf("Distance: %f\n", distance);
 
-		if (distance < threshod) {
+		float sum = 0.0;
+
+		for (int i = 0; i < 3; i++) {
+			sum += record[i];
+		}
+
+		float result = sum / 3.0;
+
+		if (result < threshod) {
+			for (int i = 0; i < 3; i++) {
+				record[i] = 100.0;
+			}
+
 			state = AVOID_COLLISION;
 		}
 
@@ -248,35 +299,43 @@ void TIM1_CC_IRQHandler(void)
 void TIM3_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM3_IRQn 0 */
-	const uint32_t THRESHOD = 50;
+	const uint32_t THRESHOLD = 20;
+	// const uint32_t UPP_THRESHOLD = 130;
 
 	extern uint8_t ball_collected;
 	extern uint8_t ball_count;
+	extern uint8_t first_rotor;
 
 	extern uint32_t count;
 
 	static uint8_t mode = 0;
 
+
 	if (mode == 0) {
 		// falling edge
+		printf("Entering Falling Edge\n");
 		TIM3->CNT = 0;
 		TIM3->CCER &= ~(0b1 << 5);
 		TIM3->CCER &= ~(0b1 << 7);
 		mode = 1;
 	} else {
 		// rising edge;
-		uint32_t local_count = TIM3->CNT;
-		count = local_count;
-
-		if (local_count > THRESHOD) {
-			printf("IR interrupt: Local_count %d\n", local_count);
-			ball_collected = 1;
-			ball_count++;
-		}
-
 		TIM3->CCER |= (0b1 << 5);
 		TIM3->CCER &= ~(0b1 << 7);
 		mode = 0;
+		uint32_t local_count = TIM3->CNT;
+		TIM3->CNT = 0;
+		if(first_rotor == 1) {
+			printf("IGNORED FIRST ROTOR SPIN!!!!!!!!!!!!!!!\n");
+			first_rotor = 0;
+		}
+		else if (local_count > THRESHOLD) {
+			ball_collected = 1;
+			ball_count++;
+		}
+		printf("IR interrupt: Local_count %d\n", local_count);
+
+//		printf("IR interrupt: Exit rising edge trigger\n");
 	}
 
 
@@ -296,14 +355,12 @@ void TIM5_IRQHandler(void)
 	extern enum State state;
 	if (state == AVOID_COLLISION) {
 		extern uint8_t avoid_finished;
-		if (avoid_finished == 0) {
-			avoid_finished = 1;
-		}
+		avoid_finished = 1;
+
 		printf("Avoid_Collision: Timer 5 seconds\n");
-	} else if (state == COLLECT) {
-		HAL_GPIO_WritePin(GPIOE, GPIO_PIN_7,  0);
-		HAL_TIM_Base_Stop_IT(&htim5);
 	}
+	HAL_GPIO_WritePin(GPIOE, GPIO_PIN_7,  0);
+	HAL_TIM_Base_Stop_IT(&htim5);
 
   /* USER CODE END TIM5_IRQn 0 */
   HAL_TIM_IRQHandler(&htim5);

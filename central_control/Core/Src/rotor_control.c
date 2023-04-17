@@ -16,7 +16,7 @@ void rotor_control (uint8_t mode) {
 
 	switch(mode) {
 		case 0 :
-			motor_pwm_val = 40;
+			motor_pwm_val = 60;
 			motor_h_bridge_in1 = 1;
 			motor_h_bridge_in2 = 0;
 			break;

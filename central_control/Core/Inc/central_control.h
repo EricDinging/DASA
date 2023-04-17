@@ -14,6 +14,8 @@
 #include "rotor_control.h"
 
 extern TIM_HandleTypeDef htim5;
+extern TIM_HandleTypeDef htim1;
+extern TIM_HandleTypeDef htim3;
 
 
 enum State {
@@ -21,10 +23,18 @@ enum State {
 	  SEARCH = 1, // blue
 	  COLLECT = 2, // green
 	  RETURN = 3, // white
-	  AVOID_COLLISION = 4 // red
+	  AVOID_COLLISION = 4, // red
+	  SEARCH_TO_COLLECT = 5,
+	  COLLECT_TO_SEARCH = 6,
+	  COLLECT_TO_RETURN = 7
   };
 
-#define MAXLOAD 600
+#define MAXLOAD 4
+
+extern uint8_t on_off; // on_off button
+extern uint8_t reset; // reset button
+
+extern uint8_t first_rotor; // ir interrupt will be first rotor
 
 
 void state_update();

@@ -1,0 +1,9 @@
+Pixy2.c:8:6:printVersion	1
+Pixy2.c:15:6:printBlock	6
+Pixy2.c:40:9:getSync	7
+Pixy2.c:79:9:recvPacket	8
+Pixy2.c:119:9:sendPacket	1
+Pixy2.c:129:8:getVersion	4
+Pixy2.c:143:8:getResolution	3
+Pixy2.c:159:8:getBlocks	8
+Pixy2.c:196:8:pixy2_init	4

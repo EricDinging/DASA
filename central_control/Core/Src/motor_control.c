@@ -16,56 +16,56 @@ void motor_control (uint8_t mode) {
 	static uint8_t rmotor_h_bridge_in4 = 0;
 	switch(mode) {
 		case 0 :
-			lmotor_pwm_val = 50;
-			rmotor_pwm_val = 50;
+			lmotor_pwm_val = 40;
+			rmotor_pwm_val = 40;
 			lmotor_h_bridge_in1 = 1;
 			lmotor_h_bridge_in2 = 0;
 			rmotor_h_bridge_in3 = 1;
 			rmotor_h_bridge_in4 = 0;
 			break;
 		case 1:
-			lmotor_pwm_val = 70;
-			rmotor_pwm_val = 70;
+			lmotor_pwm_val = 80;
+			rmotor_pwm_val = 80;
 			lmotor_h_bridge_in1 = 0;
 			lmotor_h_bridge_in2 = 1;
 			rmotor_h_bridge_in3 = 1;
 			rmotor_h_bridge_in4 = 0;
 			break;
 		case 2:
-			lmotor_pwm_val = 70;
-			rmotor_pwm_val = 70;
+			lmotor_pwm_val = 80;
+			rmotor_pwm_val = 80;
 			lmotor_h_bridge_in1 = 1;
 			lmotor_h_bridge_in2 = 0;
 			rmotor_h_bridge_in3 = 0;
 			rmotor_h_bridge_in4 = 1;
 			break;
 		case 3:
-			lmotor_pwm_val = 70;
-			rmotor_pwm_val = 70;
+			lmotor_pwm_val = 80;
+			rmotor_pwm_val = 80;
 			lmotor_h_bridge_in1 = 0;
 			lmotor_h_bridge_in2 = 1;
 			rmotor_h_bridge_in3 = 1;
 			rmotor_h_bridge_in4 = 0;
 			break;
 		case 4:
-			lmotor_pwm_val = 50;
-			rmotor_pwm_val = 50;
+			lmotor_pwm_val = 40;
+			rmotor_pwm_val = 40;
 			lmotor_h_bridge_in1 = 0;
 			lmotor_h_bridge_in2 = 1;
 			rmotor_h_bridge_in3 = 0;
 			rmotor_h_bridge_in4 = 1;
 			break;
 		case 5:
-			lmotor_pwm_val = 100;
-			rmotor_pwm_val = 100;
-			lmotor_h_bridge_in1 = 1;
-			lmotor_h_bridge_in2 = 0;
-			rmotor_h_bridge_in3 = 1;
-			rmotor_h_bridge_in4 = 0;
+			lmotor_pwm_val = 20;
+			rmotor_pwm_val = 20;
+			lmotor_h_bridge_in1 = 0;
+			lmotor_h_bridge_in2 = 1;
+			rmotor_h_bridge_in3 = 0;
+			rmotor_h_bridge_in4 = 1;
 			break;
 		case 6:
-			lmotor_pwm_val = 30;
-			rmotor_pwm_val = 30;
+			lmotor_pwm_val = 40;
+			rmotor_pwm_val = 40;
 			lmotor_h_bridge_in1 = 1;
 			lmotor_h_bridge_in2 = 0;
 			rmotor_h_bridge_in3 = 1;
