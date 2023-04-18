@@ -60,8 +60,8 @@ all: main-build
 main-build: Central_control_2.elf secondary-outputs
 
 # Tool invocations
-Central_control_2.elf Central_control_2.map: $(OBJS) $(USER_OBJS) /home/eric/Documents/Academic/EECS373/EECS373-DASA/central_control/STM32L4R5ZITXP_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "Central_control_2.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"/home/eric/Documents/Academic/EECS373/EECS373-DASA/central_control/STM32L4R5ZITXP_FLASH.ld" --specs=nosys.specs -Wl,-Map="Central_control_2.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Central_control_2.elf Central_control_2.map: $(OBJS) $(USER_OBJS) /Users/ericd/Library/Mobile\ Documents/com~apple~CloudDocs/Documents/EECS373/EECS373-DASA/central_control/STM32L4R5ZITXP_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "Central_control_2.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"/Users/ericd/Library/Mobile Documents/com~apple~CloudDocs/Documents/EECS373/EECS373-DASA/central_control/STM32L4R5ZITXP_FLASH.ld" --specs=nosys.specs -Wl,-Map="Central_control_2.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

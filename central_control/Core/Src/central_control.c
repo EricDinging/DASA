@@ -1,4 +1,4 @@
-/*
+ /*
  * central_control.c
  *
  *  Created on: Mar 25, 2023
@@ -46,7 +46,7 @@ const uint8_t Y_COLLECT = 170;
 const uint8_t Y_RETURN = 50;
 const float RETURN_STOP_SIZE = (315 * 207) * 3.0 / 4;
 const uint8_t Y_FILTER = 70;
-const uint8_t RETURN_UROFF_SIZE = (315 * 207) * 1.0 / 2;
+const uint8_t RETURN_UROFF_SIZE = (315 * 207) * 1.0 / 4;
 
 void dumb_loop(int time) {
 	 for(volatile int j = 0; j < time; ++j)
@@ -181,7 +181,6 @@ void state_update() {
 			if (return_near_station == 1) {
 				__HAL_TIM_CLEAR_IT(&htim1, TIM_IT_CC1); // clear ultrasonic interrup
 				ultrasonic_on = 0;
-				return_near_station = 0;
 			} else {
 				ultrasonic_on = 1;
 			}
@@ -322,11 +321,12 @@ uint8_t return_mode() {
 		if(best_x < XR) {
 	//		  printf("Best_x : %d, Going to direction: %d\n", best_x, 0);
 	//		  printf("Best_y : %d \n", best_y);
-			if (best_size >= RETURN_UROFF_SIZE) {
-				return_near_station = 1;
-			} else {
-				return_near_station = 0;
+			if (return_near_station == 0) {
+				if (best_size >= RETURN_UROFF_SIZE) {
+					return_near_station = 1;
+				}
 			}
+
 			if(best_size >= RETURN_STOP_SIZE) {
 				printf("---------Return\n");
 				station_arrived = 1;
