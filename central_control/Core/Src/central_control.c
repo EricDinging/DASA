@@ -1,4 +1,4 @@
- /*
+/*
  * central_control.c
  *
  *  Created on: Mar 25, 2023
@@ -22,13 +22,10 @@ uint8_t ball_locked = 0; // from AI
 uint8_t ball_not_found = 0; // from AI
 uint8_t ball_count = 0; // from IR
 uint8_t ball_collected = 0; // from IR
-
 uint8_t station_arrived = 0; // from AI
-uint8_t return_near_station = 0;
 
 uint8_t avoid_finished = 0; // from timer
 uint8_t avoid_begin = 0;
-uint8_t avoid_mode = 0; // 0: reverse, 1: rotate
 
 uint8_t on_off = 0; // on_off button
 uint8_t reset = 0; // reset button
@@ -39,14 +36,17 @@ uint8_t ir_on = 0;
 uint8_t speaker_on = 0;
 uint8_t ultrasonic_on = 0;
 
+uint8_t avoid_mode = 0;
+
+uint8_t return_motor_mode = 7;
 
 const uint8_t XL = 120;
 const uint8_t XR = 150;
 const uint8_t Y_COLLECT = 170;
 const uint8_t Y_RETURN = 50;
-const float RETURN_STOP_SIZE = (315 * 207) * 3.0 / 4;
+const float SIZE = (315 * 207) * 1.0 / 2;
+
 const uint8_t Y_FILTER = 70;
-const uint8_t RETURN_UROFF_SIZE = (315 * 207) * 1.0 / 4;
 
 void dumb_loop(int time) {
 	 for(volatile int j = 0; j < time; ++j)
@@ -69,7 +69,6 @@ void state_update() {
 		ball_count = 0;
 		ball_collected = 0;
 		station_arrived = 0;
-		return_near_station = 0;
 		avoid_finished = 0;
 		avoid_begin = 0;
 		reset = 0;
@@ -80,6 +79,7 @@ void state_update() {
 		ultrasonic_on = 0;
 		avoid_mode = 0;
 		first_rotor = 0;
+		return_motor_mode = 7;
 	}
 
 	// disable interrupt ultrasonic, ir
@@ -178,12 +178,12 @@ void state_update() {
 			reset = 1;
 			next_state = INIT;
 		} else {
-			if (return_near_station == 1) {
-				__HAL_TIM_CLEAR_IT(&htim1, TIM_IT_CC1); // clear ultrasonic interrup
-				ultrasonic_on = 0;
-			} else {
-				ultrasonic_on = 1;
-			}
+//			if (return_motor_mode == 0) {
+//				ultrasonic_on = 0;
+//			} else {
+//				__HAL_TIM_CLEAR_IT(&htim1, TIM_IT_CC1); // clear ultrasonic interrupt
+//				ultrasonic_on = 1;
+//			}
 		}
 
 		break;
@@ -321,19 +321,11 @@ uint8_t return_mode() {
 		if(best_x < XR) {
 	//		  printf("Best_x : %d, Going to direction: %d\n", best_x, 0);
 	//		  printf("Best_y : %d \n", best_y);
-			if (return_near_station == 0) {
-				if (best_size >= RETURN_UROFF_SIZE) {
-					return_near_station = 1;
-				}
-			}
-
-			if(best_size >= RETURN_STOP_SIZE) {
-				printf("---------Return\n");
-				station_arrived = 1;
-			} else {
-				station_arrived = 0;
-			}
-			return 0;
+			  if(best_size >= SIZE) {
+				  printf("---------Return\n");
+				  station_arrived = 1;
+			  }
+			  return 0;
 		}
 		if(best_x <= 315) {
 		//		  printf("Best_x : %d, Going to direction: %d\n", best_x, 2);
@@ -390,7 +382,7 @@ void execute() {
 		HAL_GPIO_WritePin(GPIOC, GPIO_PIN_8,  1); // white led
 		HAL_GPIO_WritePin(GPIOC, GPIO_PIN_9,  1); // blue led
 		printf("Green Button pressed\n");
-		uint8_t return_motor_mode = return_mode();
+		return_motor_mode = return_mode();
 		motor_control(return_motor_mode);
 		break;
 	case AVOID_COLLISION:
@@ -420,7 +412,7 @@ void execute() {
 	case SEARCH_TO_COLLECT : {
 		rotor_control(0);
 		motor_control(5);
-		dumb_loop(15000);
+		dumb_loop(20000);
 //		printf("ending search to collect\n");
 		break;
 	}
