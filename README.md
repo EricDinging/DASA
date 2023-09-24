@@ -1,4 +1,6 @@
 # DASA
+<img src="robot.jpg" alt="drawing" width="200"/>
+
 ## Overview
 Tennis ball collector is a automated robot for tennis ball collection. Our robot will be targeted towards people who enjoy playing tennis but don’t want to deal with the hassle of picking up all the balls in between play.
 
